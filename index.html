@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Life in Weeks</title>
+    <script src="https://unpkg.com/vue"></script>
+    <style>
+        .week {
+            width: 20px;
+            height: 20px;
+            margin: 5px;
+            display: inline-block;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="app">
+        <div class="week" v-for="week in weeks" v-bind:style="{ backgroundColor: week}"></div>
+    </div>
+
+    <script>
+        function toWeek(date) {
+            return Math.ceil(date / (3600 * 24 * 1000 * 7));
+        }
+        var app = new Vue({
+            el: '#app',
+            data: {
+                years: 81,
+                birthday: new Date('1989/10/27'),
+                special: [
+                    new Date('2011/05/01'),
+                    new Date('2011/09/17'),
+                    new Date('1999/10/27'),
+                ]
+            },
+            computed: {
+                weeks: function () {
+                    var arr = [];
+                    var thisWeek = toWeek(Date.now());
+                    var birthWeek = toWeek(this.birthday);
+                    for (i = 0; i < this.years * 54; i++) {
+                        var week = thisWeek - birthWeek > i ? 'darkred' : 'white';
+                        if (this.special.map(s => toWeek(s) - birthWeek).includes(i)) week = 'gold';
+                        if (thisWeek - birthWeek == i) week = 'blue';
+                        arr.push(week);
+                    };
+                    return arr;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
